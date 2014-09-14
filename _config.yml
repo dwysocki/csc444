@@ -1,0 +1,17 @@
+# Site settings
+title: Compiler
+email: dwysocki@oswego.edu
+description: >
+  Dan Wysocki's course page for the Fall 2014 section of
+  Compiler (CSC444).
+baseurl: "/mini-java"
+url: "http://dwysocki.github.io/compiler"
+github_username: dwysocki
+
+# Build settings
+markdown: kramdown
+kramdown:
+  input: GFM
+highlighting: pygments
+
+exclude: ["_site"]
