@@ -5,7 +5,7 @@ description: >
   Dan Wysocki's course page for the Fall 2014 section of
   Compiler (CSC444).
 baseurl: "/csc444"
-url: "http://dwysocki.github.io/compiler"
+url: "http://dwysocki.github.io/csc444"
 github_username: dwysocki
 
 # Build settings
