@@ -19,12 +19,12 @@ byte code, or even more source code, even in the same language
         - functions as a parse tree, but is a more convenient representation
     - two types of parsing
         - top down (LL)
-		    - recursive descent
+            - recursive descent
         - bottom up (LR)
             - generates a table
             - humans do not write LR parsers by hand
     - semantic analysis
-	    - type checking / type inference
+        - type checking / type inference
         - static semantics
         - dynamic analysis
 
@@ -60,13 +60,13 @@ class A { int x; if (x == 0) ... }
     - `A in Alphabet`
     - `x a`
     - `l == { a, b, ..., z, A, B, ..., Z, _ }`
-	- `d == { 0, 1, 2, ..., 9 }`
+    - `d == { 0, 1, 2, ..., 9 }`
     - `ID == l(l|d)*`
     - `class` and `if` both match `ID`, so you either make explicit expressions
       for them *before* `ID`, or you just tokenize them as identifiers and
       parse them separately later
     - reason not to like Fortran, number 7813
-	    - language cannot be defined with regular expressions
+        - language cannot be defined with regular expressions
 
           ```fortran
           C      this is legal
@@ -77,8 +77,8 @@ class A { int x; if (x == 0) ... }
     - literals
         - int lit (integer literal)
             - do we treat negatives and explicit positives as a unary operator
-			  (`+` or `-`) followed by a number, or as a single entity
-			  (e.g. `-1`, `+3`)
+              (`+` or `-`) followed by a number, or as a single entity
+              (e.g. `-1`, `+3`)
                 - `d+`
                 - `(+|-)?d+`
             - what about hexadecimal, binary, and octal literals?
@@ -122,7 +122,7 @@ class A { int x; if (x == 0) ... }
 
 - lexical analysis
     - yacc
-	- lex, flex, parser generator
+    - lex, flex, parser generator
 
       ```grep
       [0-9]+         { return INTLIT; }
@@ -132,7 +132,7 @@ class A { int x; if (x == 0) ... }
 
 - parsing
     - assume we have a language parsable by a CFG
-	  (though this is usually a lie)
+      (though this is usually a lie)
     - `S -> A B | C d`
     - `A -> A x | ε`
     - `A -> ( A )`
@@ -212,7 +212,7 @@ class A { int x; if (x == 0) ... }
 
           ```antlr
           A  -> α β1 | α β2 | γ
-	      # transforms into
+          # transforms into
           A  -> α A' | γ
           A' -> β1 | β2
           ```
@@ -278,40 +278,40 @@ A  : '(' E ')'
     - algorithm
         1. add `S' -> S $`
         2. `A -> α B β`
-		   add `first(β)` to `follow(B)`
-		3. `A -> α B` or `A -> α B β` nullable `β`
+           add `first(β)` to `follow(B)`
+        3. `A -> α B` or `A -> α B β` nullable `β`
            add `Follow(A)` to `Follow(B)`
 
       |---------------------+--------------------|
       |                     | `S -> E $`         |
-	  |---------------------+--------------------|
-	  | `A  = { (, ID }`    | `f(F')`            |
-	  |---------------------+--------------------|
-	  | `F' = { ε, A }`     | `f(T')`            |
-	  |---------------------+--------------------|
-	  | `F  = { (, ID }`    | `f(T')`            |
-	  |---------------------+--------------------|
-	  | `T' = { ε, (, ID }` | `F(T)`             |
-	  |---------------------+--------------------|
-	  | `T  = { (, ID }`    | `f(E')`            |
-	  |---------------------+--------------------|
-	  | `E' = { ε, | }`     | `F(T)`             |
-	  |---------------------+--------------------|
-	  | `E  = { (, ID }`    | `F(T)`  `)` `$`    |
+      |---------------------+--------------------|
+      | `A  = { (, ID }`    | `f(F')`            |
+      |---------------------+--------------------|
+      | `F' = { ε, A }`     | `f(T')`            |
+      |---------------------+--------------------|
+      | `F  = { (, ID }`    | `f(T')`            |
+      |---------------------+--------------------|
+      | `T' = { ε, (, ID }` | `F(T)`             |
+      |---------------------+--------------------|
+      | `T  = { (, ID }`    | `f(E')`            |
+      |---------------------+--------------------|
+      | `E' = { ε, | }`     | `F(T)`             |
+      |---------------------+--------------------|
+      | `E  = { (, ID }`    | `F(T)`  `)` `$`    |
       |---------------------+--------------------|
 
 - LL parsers
     - transform to be LL-parsable
-	- find first/follows
-	- for each lhs: `A -> B | C`
-		- for each symbol `x` in `first(B)`
-			- if `B` is nullable, for each `x` in `Follows(B)`, check and call
+    - find first/follows
+    - for each lhs: `A -> B | C`
+        - for each symbol `x` in `first(B)`
+            - if `B` is nullable, for each `x` in `Follows(B)`, check and call
               `B`
-			- otherwise, throw errors
-				- error recovery
-					- add
-					- delete
-					- replace
+            - otherwise, throw errors
+                - error recovery
+                    - add
+                    - delete
+                    - replace
 - LR parsers
 
   ```
@@ -328,112 +328,112 @@ A  : '(' E ')'
     - first thing we see is `'int'`, which is a prefix which is part of a viable
       right hand side (`S`), so we push it onto a stack
 
-	  |-------|
-	  | stack |
       |-------|
-	  | `int` |
-	  |-------|
+      | stack |
+      |-------|
+      | `int` |
+      |-------|
 
     - then we see `a` which is an `ID`, (though we don't know which RHS it goes
       in), so we push it onto a stack
 
-	  |-------|
-	  | stack |
       |-------|
-	  | `int` |
-	  | `ID`  |
-	  |-------|
-
-	- the stack now contains `'int' ID`, which matches `'int' L`, so we reduce
-
-	  |-------|
-	  | stack |
+      | stack |
       |-------|
-	  | `int` |
-	  | `L`   |
-	  |-------|
+      | `int` |
+      | `ID`  |
+      |-------|
+
+    - the stack now contains `'int' ID`, which matches `'int' L`, so we reduce
+
+      |-------|
+      | stack |
+      |-------|
+      | `int` |
+      | `L`   |
+      |-------|
 
     - now we read in `,`, which is part of `L`, and push it onto the stack
 
-	  |-------|
-	  | stack |
       |-------|
-	  | `int` |
-	  | `L`   |
-	  | `,`   |
-	  |-------|
+      | stack |
+      |-------|
+      | `int` |
+      | `L`   |
+      | `,`   |
+      |-------|
 
     - now we read `b`, which is another `ID`
 
-	  |-------|
-	  | stack |
       |-------|
-	  | `int` |
-	  | `L`   |
-	  | `,`   |
-	  | `ID`  |
-	  |-------|
+      | stack |
+      |-------|
+      | `int` |
+      | `L`   |
+      | `,`   |
+      | `ID`  |
+      |-------|
 
     - we now have `L ',' ID`, which is another valid `L`, so we reduce
 
       |-------|
-	  | stack |
+      | stack |
       |-------|
-	  | `int` |
-	  | `L`   |
-	  |-------|
+      | `int` |
+      | `L`   |
+      |-------|
 
     - we have `'int' L`, which is a valid `S`, so we reduce
 
-	  |-------|
-	  | stack |
       |-------|
-	  | `S`   |
-	  |-------|
+      | stack |
+      |-------|
+      | `S`   |
+      |-------|
 
     - now we read in `$`, so we push it onto the stack
 
-	  |-------|
-	  | stack |
       |-------|
-	  | `S`   |
-	  | `$`   |
-	  |-------|
+      | stack |
+      |-------|
+      | `S`   |
+      | `$`   |
+      |-------|
 
     - `S $` is a valid `S'`, so we reduce to `S'`, and we're done!
     - Item Sets:
-	    - Set 0 (core) `S' -> S $`
-		- Closure `S -> 'int' L`
-		- the two above are together one item set
+        - Set 0 (core) `S' -> S $`
+        - Closure `S -> 'int' L`
+        - the two above are together one item set
 
       |-----+----------------------+-----------------------|
-	  | Set |         Core         |        Closure        |
-	  |-----+----------------------+-----------------------|
-	  |  0  | `S' -> S $` (1)      | `S -> 'int' L` (2)    |
-	  |-----+----------------------+-----------------------|
-	  |  1  | `S' -> S . $`        | (acc)                 |
-	  |-----+----------------------+-----------------------|
-	  |  2  | `S -> int . L` (3)   | `L -> . L ',' ID` (3) |
-	  |-----+----------------------+-----------------------|
-	  |     |                      | `L -> . ID` (4)       |
-	  |-----+----------------------+-----------------------|
-	  |  3  | `S -> 'int' L .` (-) |                       |
-	  |-----+----------------------+-----------------------|
-	  |     | `S -> L . , ID`  (3) |                       |
-	  |-----+----------------------+-----------------------|
+      | Set |         Core         |        Closure        |
+      |-----+----------------------+-----------------------|
+      |  0  | `S' -> S $` (1)      | `S -> 'int' L` (2)    |
+      |-----+----------------------+-----------------------|
+      |  1  | `S' -> S . $`        | (acc)                 |
+      |-----+----------------------+-----------------------|
+      |  2  | `S -> int . L` (3)   | `L -> . L ',' ID` (3) |
+      |-----+----------------------+-----------------------|
+      |     |                      | `L -> . ID` (4)       |
+      |-----+----------------------+-----------------------|
+      |  3  | `S -> 'int' L .` (-) |                       |
+      |-----+----------------------+-----------------------|
+      |     | `S -> L . , ID`  (3) |                       |
+      |-----+----------------------+-----------------------|
       |  4  | `L -> ID` (-)        |                       |
-	  |-----+----------------------+-----------------------|
-	  |  5  | `S -> L ',' . ID`    |                       |
-	  |-----+----------------------+-----------------------|
-	  |  6  | `S -> L ',' ID .`    |                       |
-	  |-----+----------------------+-----------------------|
+      |-----+----------------------+-----------------------|
+      |  5  | `S -> L ',' . ID`    |                       |
+      |-----+----------------------+-----------------------|
+      |  6  | `S -> L ',' ID .`    |                       |
+      |-----+----------------------+-----------------------|
 
       |-----+-------+-----------+-------+---------------+-------+-------|
-	  | set | `int` | `','`     | `ID`  | `$`           | `S`   | `L`   |
+      | set | `int` | `','`     | `ID`  | `$`           | `S`   | `L`   |
       |-----+-------+-----------+-------+---------------+-------+-------|
-	  |  0  |  +2   |           |       |               | goto1 |       |
+      |  0  |  +2   |           |       |               | goto1 |       |
       |-----+-------+-----------+-------+---------------+-------+-------|
-	  |  1  |       |           |       | acc           |       |       |
+      |  1  |       |           |       | acc           |       |       |
       |-----+-------+-----------+-------+---------------+-------+-------|
       |  2  |       |           |  +4   |               |       | goto3 |
       |-----+-------+-----------+-------+---------------+-------+-------|
@@ -449,14 +449,14 @@ A  : '(' E ')'
     - now our parse looks something like
 
       |-----------+-----------+---------|
-	  | 0         | 1         | 2       |
-	  |-----------+-----------+---------|
-	  | `' ' 0`   | `' ' 0`   | `' ' 0` |
-	  |-----------+-----------+---------|
-	  | `'int' 2` | `'int L'` | `'S'`   |
-	  |-----------+-----------+---------|
-	  | `'ID' 4`  |           |         |
-	  |-----------+-----------+---------|
+      | 0         | 1         | 2       |
+      |-----------+-----------+---------|
+      | `' ' 0`   | `' ' 0`   | `' ' 0` |
+      |-----------+-----------+---------|
+      | `'int' 2` | `'int L'` | `'S'`   |
+      |-----------+-----------+---------|
+      | `'ID' 4`  |           |         |
+      |-----------+-----------+---------|
 
 - parser tools
 
@@ -563,3 +563,51 @@ E : E + E
 |---+--------+--------+--------+--------+--------+--------+--------+--------|
 | j |        |        |`E:(E)` |`E:(E)` |`E:(E)` |`E:(E)` |        |        |
 |---+--------+--------+--------+--------+--------+--------+--------+--------|
+
+# Errors
+
+- detect
+    - the science part
+- report
+    - the art part
+    - explosion and failure are the 2 sides of the report specturm
+- recovery
+    - where things get pretty insane
+    - add / remove / replace
+    - add phantom productions to your grammar
+        - not legal code, but accepted by the parser
+    - lookaheads for sync tokens like `;` help escape from errors,
+      because errors tend to be separated by them
+        - partly for this reason, error messages for spurious sync tokens
+          are almost universally bad
+
+          ~~~
+          $ javac Foo.java 
+          Foo.java:2: error: illegal start of type
+              public { static void main(String[] args) {
+                     ^
+          Foo.java:2: error: ';' expected
+              public { static void main(String[] args) {
+                     ^
+          2 errors
+          ~~~
+
+# Static Semantics
+
+- checks for things which are syntactically legal, but not allowed
+- type checks
+- declaration before use
+- write before read
+- exception throws
+- unreachable code
+- returns
+- clashes
+    - scopes
+    - overloads
+    - overrides
+
+- need some program representation
+    - we have a parser therefore we have a parse tree
+    - we want something better than a parse tree, which isn't too far from it
+    - enter the AST
+	    - 
