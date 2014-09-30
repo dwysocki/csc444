@@ -610,4 +610,36 @@ E : E + E
     - we have a parser therefore we have a parse tree
     - we want something better than a parse tree, which isn't too far from it
     - enter the AST
-	    - 
+    - bottom-up tree building
+        - start with the children
+        - called synthetic or s-attributed
+            - parent nodes are synthesized from their children
+        - can be done without ever actually building the tree
+        - all compilers built 20+ years ago were bottom-up, as they could not
+          fit the tree in memory
+    - top-down tree building
+        - start from the root
+        - called L-attributed
+
+- program representations mainly need to do 2 things
+    - bindings
+    - constraints
+
+- klass
+    - `klass super` (or null)
+    - is reference?
+    - `set<klass> interfaces`
+    - attributes (e.g. `abstract`)
+    - `String name`
+    - `set<var> statics`
+    - `set<var> fields`
+    - `set<method> methods`
+- var
+    - `String name` (or `Symbol`)
+    - `klass type`
+    - `set<bit> attributes` (e.g. `static`, `final`, `constant`)
+    - `Value value`
+- method
+    - `String name`
+- we need a mapping of `Symbol` to `Storage`
+    - `Symbol` should be a thin venier over `ID`
