@@ -625,7 +625,7 @@ E : E + E
     - bindings
     - constraints
 
-- klass
+- `klass`
     - `klass super` (or null)
     - is reference?
     - `set<klass> interfaces`
@@ -634,12 +634,118 @@ E : E + E
     - `set<var> statics`
     - `set<var> fields`
     - `set<method> methods`
-- var
+- `Var`
     - `String name` (or `Symbol`)
     - `klass type`
     - `set<bit> attributes` (e.g. `static`, `final`, `constant`)
     - `Value value`
-- method
+- `method`
     - `String name`
+    - `List<Var> params`
+    - `Var return-type`
+    - `klass owner`
+    - `attributes` (`final`, `public`, `private`, etc.)
+    - `Block body`
+- `Block`
+    - `List<Stat> stats`
+- `Stat`
+    - `ifStat`
+        - `cond`
+        - `then stat`
+        - `else stat?`
+    - `assignStat`
+        - `lhs`
+        - `rhs`
+    - `declStat`
+        - just like assign but introduces a new variable
+    - `callStat`
+    - `ExpStat`
+- `Exp`
+    - `AddExp`
+    - `MulExp`
+    - `NegateExp`
+    - sub-categories:
+        - `nullary`
+        - `unary`
+        - `binary`
+        - `ternary`
 - we need a mapping of `Symbol` to `Storage`
     - `Symbol` should be a thin venier over `ID`
+
+Compilation process:
+
+- create
+- resolve / install / check
+- type-check
+- static semantics
+
+Essentially we have a big table, where the columns represent types of nodes, and
+the rows represent checks we want to do.
+
+|                 | `Anode` | `Bnode` | ... |
+|-----------------+---------+---------+-----|
+| type-check      | x       | x       | ... |
+| exception-check | x       | x       | ... |
+| eq-hash         | x       | x       | ... |
+| ...             | ...     | ...     | ... |
+
+Two ways to handle this are to make a class for each type of node, with
+methods for each of the checks you want to perform, or you can make a function
+for each type of check, with a big switch for each type of node.
+
+Another approach is the visitor pattern.
+
+{% highlight java %}
+analyze(TypeCheck a, Node p)
+analyze(ExceptionCheck a, Node p)
+{% endhighlight %}
+
+Visitor Pattern (double dispatch)
+
+{% highlight java %}
+class Visitor {
+  visit PlusNode(Node p) {}
+}
+
+class Node {
+  class PlusNode {
+    int left, right;
+    void accept(Visitor v) {
+      v.visit(this);
+    }
+  }
+}
+{% endhighlight %}
+
+- resolution
+    - exactly once
+{% highlight java %}
+class C {
+  int a;
+  int a; /* illegal */
+}
+{% endhighlight %}
+    - scoping
+{% highlight java %}
+class C {
+  int a;
+  void f() {
+    int a = 1;
+    {
+      int a = 2; /* legal */
+      f(a);
+    }
+    f(a)
+  }
+}
+{% endhighlight %}
+        - shadowing
+{% highlight java %}
+class C {
+  static int a;
+}
+class D extends C {
+  static int a;
+}
+{% endhighlight %}
+    - overloading / overriding
