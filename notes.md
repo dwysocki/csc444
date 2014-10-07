@@ -749,3 +749,33 @@ class D extends C {
 }
 {% endhighlight %}
     - overloading / overriding
+
+# Resolution and Type Checking
+
+- single pass
+    - `install` on production
+        - look up or add
+        - "If it's not there, put it. If it is, use it."
+    - side-stack
+        - to help with name resolution, when you enter a scope, you push
+          onto a stack
+    - context
+    - the only languages that allow for single-pass these days are dinosaur
+      languages like C, Fortran, and Algol
+- multi pass
+    - `install`
+        - add it
+        - use it
+        - error
+    - build up the attributes of a class as you parse it
+- `lookup(name, arglist, rettype)`
+    - search through the current scope for `name`
+    - if `name` is not found, recur in the next scope up
+    - if the top scope is reached, `lookup` returns `nil`
+    - tip: when implementing this for mini-java, start with class
+      declarations, as that's almost no work
+- `isAssignable(lhs, rhs)`
+    - same type on both sides (good)
+    - `lhs` is same class (or super class) of `rhs`
+    - coercible
+        - (warning?)
