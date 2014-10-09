@@ -779,3 +779,20 @@ class D extends C {
     - `lhs` is same class (or super class) of `rhs`
     - coercible
         - (warning?)
+- type inference
+    - legal scala: `val one = 1`
+    - (Damas-)Hindley-Milner type system
+
+## Macros
+
+- C preprocessor style
+    - it's a separate program, so that's the end of the story
+- other styles
+    - lisp
+        - builds a tree node when it finds a macro during compilation
+- generics
+    - C++ style templates are actually macros
+    - Java uses common code
+        - treat all types as `Object` at first
+        - insert casts to the specific type
+        - uses boxing on primitives
