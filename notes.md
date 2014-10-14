@@ -796,3 +796,74 @@ class D extends C {
         - treat all types as `Object` at first
         - insert casts to the specific type
         - uses boxing on primitives
+
+## Locations and Variables
+
+`int a = 3;`
+
+- where does `3` live?
+- in recent decades:
+    - locals
+        - stack frames?
+        - registers?
+    - statics
+        - allocated before program starts
+        - do not go away
+    - heaps
+        - that's where java puts `new` things
+    - other
+        - scoped memory location
+        - device-level stuff
+- where to put things?
+
+{% highlight java %}
+int f() {
+  /* we're in a function, so obviously it's a local */
+  int a = 3; 
+  /* the following is actually represented as
+  int tmp = c + d;
+  int b = a + tmp;
+  */
+  int b = a + c + d;
+}
+{% endhighlight %}
+
+{% highlight asm %}
+load  c           r1
+load  d           r2
+load  *something* r3
+add   r1 r3       r4
+store r4 tmp
+{% endhighlight %}
+
+In memory, every object starts at a certain location, and each of its
+fields exist at a certain multiple of the offset from that location.
+In most OO languages, the first field is always an object header.
+That header usually contains a pointer to class itself, which is in
+the static memory. The class has a table of its methods, which are just
+function pointers. This is the bare minimum for the header, but most languages
+that aren't C++ also keep some bookkeeping.
+
+Array access:
+
+- conceptually, we have to do `origin + (index * width)`
+- however, multiplication is expensive
+- but wait, all of our widths should be powers of two!
+- if width is `4`, since `lg(4) = 2`, the operation becomes
+  `origin + (index << 2)`
+- there is usually a specific machine instruction for this,
+  since it is so common
+
+Subclassing:
+
+{% highlight java %}
+class Point                { int x,y;   }
+class Point3 extends Point { int     z; }
+{% endhighlight %}
+
+In memory, `Point` would have a header,
+and then `x` and `y` at certain offsets.
+Class `Point3` has to add `z` at an offset after `x` and `y`.
+This scheme makes multiple inheritance a nightmare.
+Resolving multiple inheritance can only be done with adding layers of
+indirection.
