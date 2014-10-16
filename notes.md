@@ -867,3 +867,19 @@ Class `Point3` has to add `z` at an offset after `x` and `y`.
 This scheme makes multiple inheritance a nightmare.
 Resolving multiple inheritance can only be done with adding layers of
 indirection.
+
+{% highlight C %}
+main() {
+  int a;
+  int tmp = f(a);
+  int b = tmp;
+}
+int f(int x) {
+  int y = x + 1;
+  int z = g(y);
+  return z;
+}
+int g(int x) {
+  return x + 1;
+}
+{% endhighlight %}

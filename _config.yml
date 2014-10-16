@@ -10,8 +10,6 @@ github_username: dwysocki
 
 # Build settings
 markdown: kramdown
-kramdown:
-  input: GFM
 highlighting: pygments
 
 exclude: ["_site"]
