@@ -883,3 +883,25 @@ int g(int x) {
   return x + 1;
 }
 {% endhighlight %}
+
+
+# Representing and Generating Code
+
+Representations
+
+- instructions (x86, ARM, etc)
+    - CISC
+        - large instruction set
+        - `op (mem)++ -> mem`
+    - RISC
+        - very small instruction set
+        - `load  mem -> reg`
+        - `store reg -> mem`
+        - `op    reg -> reg`
+        - `+misc`
+- bytecodes
+    - machine independent code which is trivially translatable to machine code
+- internal representation
+
+Depending on the compiler, some or all of these representations may be used
+sequentially
