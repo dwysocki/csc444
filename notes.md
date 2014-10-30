@@ -902,6 +902,9 @@ Representations
 - bytecodes
     - machine independent code which is trivially translatable to machine code
 - internal representation
+    - some kind of graph
+    - eventually transformed into one of the above representations
 
 Depending on the compiler, some or all of these representations may be used
 sequentially
+
