@@ -4,6 +4,10 @@ title: "Notes"
 author: "Dan Wysocki"
 ---
 
+# Links
+
+[JVM Spec](http://docs.oracle.com/javase/specs/jvms/se7/html/index.html)
+
 # Introduction
 
 ```
@@ -908,3 +912,24 @@ Representations
 Depending on the compiler, some or all of these representations may be used
 sequentially
 
+
+# JVM
+
+Java class files
+
+- constant pool
+    - a class file which is basically a big table of all compile-time constants
+        - integer literals (e.g. `13`)
+        - string literals (e.g. `"hi mom"`)
+        - class names (e.g. `Ljava/lang/Object;`)
+    - every constant needs to be referenced by its index in the pool
+        - tools exist to do this for you
+            - [Jasmin](
+                https://en.wikipedia.org/wiki/Jasmin_%28software%29)
+                - not used much anymore, not really maintained
+            - [ASM](
+                https://en.wikipedia.org/wiki/ObjectWeb_ASM)
+                - used extensively in enterprise, well maintained
+                - [clojure example](https://gist.github.com/athos/1033052)
+            - [BCEL](
+                https://en.wikipedia.org/wiki/Byte_Code_Engineering_Library)
