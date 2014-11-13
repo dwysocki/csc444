@@ -933,3 +933,40 @@ Java class files
                 - [clojure example](https://gist.github.com/athos/1033052)
             - [BCEL](
                 https://en.wikipedia.org/wiki/Byte_Code_Engineering_Library)
+
+# Optimization
+
+- a misnomer
+- better term is "improvement"
+    - better coding
+        - usually means (expected) faster
+        - smaller
+        - these can be contradictory
+    - internal-only
+- constraints
+    - equivalent behavior?
+    - compatible behavior w.r.t. spec
+- representation
+    - bytecode
+    - target machine code
+    - quads
+        - `(add, v1, v2, v3)`
+        - `(neg, v1, _, v3)`
+        - `(load, add, _, dest)`
+        - `(if, v1, _, something)`
+    - basic block
+- forms
+    - (forward) symbolic execution
+        - "never do at runtime what you can do at compile time"
+    - (backward) liveness analysis
+        - dead code removal
+    - strength reduction
+        - algebraic
+            - `a + 0 -> a`
+            - `2 * x -> x << 1`
+        - redundancies
+            - `a = 1; a = 1; -> a = 1`
+    - SSA form
+        - every time a variable is altered, instead store it in a new name
+        - `a = 1; a++; -> a = 1; a' = a + 1;`
+        - "pseudo-functional programming"
