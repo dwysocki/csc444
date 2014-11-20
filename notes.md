@@ -970,3 +970,16 @@ Java class files
         - every time a variable is altered, instead store it in a new name
         - `a = 1; a++; -> a = 1; a' = a + 1;`
         - "pseudo-functional programming"
+
+# Data Flow
+
+- forward, reverse
+- graphs
+    - split
+    - merge
+- cycles
+    - fixed point
+    - special cases
+- loops
+    - hoisting
+    - induction variables
